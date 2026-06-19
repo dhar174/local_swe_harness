@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     model_gateway_url: str = "http://model-gateway:8001"
     sandbox_worker_url: str = "http://sandbox-worker:8002"
-    database_url: str = "******postgres:5432/swe_agents"
+    database_url: str = "postgresql://user:password@localhost:5432/swe_agents"
 
     # Config file paths
     models_config: str = "config/models.yaml"

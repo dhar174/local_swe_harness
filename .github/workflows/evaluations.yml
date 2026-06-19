@@ -14,10 +14,15 @@ on:
   schedule:
     - cron: "0 2 * * 0"  # Weekly on Sunday at 02:00 UTC
 
+permissions:
+  contents: read
+
 jobs:
   eval-fake-models:
     name: Evaluation (Fake Models)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v3
@@ -43,6 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.inputs.use_real_models == 'true'
     environment: evaluation  # requires manual approval
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v3

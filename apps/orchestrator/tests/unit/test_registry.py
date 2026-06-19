@@ -1,6 +1,7 @@
 """Unit tests for the model capability registry."""
 from __future__ import annotations
 
+import pathlib
 import textwrap
 
 import pytest
@@ -31,7 +32,7 @@ SAMPLE_CONFIG = textwrap.dedent("""\
 
 
 @pytest.fixture
-def registry(tmp_path: pytest.TempPathFactory) -> ModelRegistry:
+def registry(tmp_path: pathlib.Path) -> ModelRegistry:
     cfg = tmp_path / "models.yaml"
     cfg.write_text(SAMPLE_CONFIG)
     return ModelRegistry.from_yaml(cfg)

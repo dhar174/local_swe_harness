@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: "0 6 * * 1"  # Weekly on Monday
 
+permissions:
+  contents: read
+
 jobs:
   codeql:
     name: CodeQL Analysis
@@ -28,6 +31,8 @@ jobs:
   secret-scan:
     name: Secret Scanning (gitleaks)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
         with:
@@ -39,6 +44,8 @@ jobs:
   bandit:
     name: Bandit SAST
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v3

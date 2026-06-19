@@ -13,7 +13,7 @@ services:
       - APP_ENV=local
       - MODEL_GATEWAY_URL=http://model-gateway:8001
       - SANDBOX_WORKER_URL=http://sandbox-worker:8002
-      - DATABASE_URL=******postgres:5432/swe_agents
+      - DATABASE_URL=postgresql://swe:changeme@postgres:5432/swe_agents
     ports:
       - "8000:8000"
     depends_on:

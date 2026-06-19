@@ -1,6 +1,8 @@
 """Unit tests for security policy modules."""
 from __future__ import annotations
 
+import pathlib
+
 import pytest
 
 from swe_agents.security.command_policy import CommandPolicy
@@ -28,11 +30,11 @@ class TestCommandPolicy:
 
 
 class TestPathPolicy:
-    def test_allowed_path(self, tmp_path: pytest.TempPathFactory) -> None:
+    def test_allowed_path(self, tmp_path: pathlib.Path) -> None:
         policy = PathPolicy([str(tmp_path)])
         assert policy.is_allowed(tmp_path / "subdir" / "file.py")
 
-    def test_denied_path(self, tmp_path: pytest.TempPathFactory) -> None:
+    def test_denied_path(self, tmp_path: pathlib.Path) -> None:
         policy = PathPolicy([str(tmp_path)])
         assert not policy.is_allowed("/etc/passwd")
 
