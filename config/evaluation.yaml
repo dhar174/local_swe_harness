@@ -1,0 +1,32 @@
+# Evaluation harness configuration
+schema_version: 1
+
+harness:
+  fake_models_only: true   # set to false only for production eval runs
+  parallel_workers: 4
+  timeout_seconds: 120
+
+metrics:
+  - routing_accuracy
+  - patch_correctness
+  - test_success_rate
+  - review_accuracy
+  - retry_rate
+  - latency_p50_ms
+  - latency_p95_ms
+  - input_tokens_mean
+  - output_tokens_mean
+  - estimated_cost_usd
+  - cloud_escalation_rate
+
+datasets:
+  routing: evals/datasets/routing_cases.jsonl
+  patch: evals/datasets/patch_cases.jsonl
+  review: evals/datasets/review_cases.jsonl
+  escalation: evals/datasets/escalation_cases.jsonl
+
+thresholds:
+  routing_accuracy: 0.85
+  patch_correctness: 0.80
+  test_success_rate: 0.75
+  review_accuracy: 0.80

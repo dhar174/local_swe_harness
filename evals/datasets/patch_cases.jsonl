@@ -1,0 +1,2 @@
+{"schema_version": 1, "id": "pc-001", "description": "fix off-by-one in pagination", "expected_patch_lines": 3}
+{"schema_version": 1, "id": "pc-002", "description": "add null check for user email", "expected_patch_lines": 5}

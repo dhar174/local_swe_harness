@@ -1,0 +1,26 @@
+# Tool availability and limits per tier
+schema_version: 1
+
+sandbox:
+  enabled: true
+  max_cpu_seconds: 60
+  max_memory_mb: 512
+  network_access: false
+  allowed_commands:
+    - pytest
+    - ruff check
+    - ruff format
+    - mypy
+    - python
+    - pip
+    - uv run
+    - git diff
+    - git status
+  allowed_path_prefixes:
+    - /tmp/worktrees/
+    - /workspace/
+
+search:
+  enabled: true
+  top_k_default: 10
+  max_context_files: 20

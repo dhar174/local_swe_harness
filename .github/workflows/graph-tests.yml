@@ -1,0 +1,34 @@
+# Graph routing and state tests – separate workflow for visibility.
+name: Graph Tests
+
+on:
+  push:
+    paths:
+      - "apps/orchestrator/src/swe_agents/graphs/**"
+      - "apps/orchestrator/src/swe_agents/routing/**"
+      - "apps/orchestrator/tests/graph/**"
+  pull_request:
+    paths:
+      - "apps/orchestrator/src/swe_agents/graphs/**"
+      - "apps/orchestrator/src/swe_agents/routing/**"
+      - "apps/orchestrator/tests/graph/**"
+
+jobs:
+  graph-tests:
+    name: Graph Routing & State Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - run: uv sync --all-packages --all-extras
+      - run: |
+          uv run pytest -m "graph" -v --tb=long
+        env:
+          PYTHONPATH: >-
+            apps/orchestrator/src:packages/contracts/src:packages/model_clients/src:
+            packages/tool_clients/src

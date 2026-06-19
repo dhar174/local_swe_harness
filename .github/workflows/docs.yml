@@ -1,0 +1,30 @@
+# Documentation build and deploy
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - "README.md"
+
+permissions:
+  contents: write
+
+jobs:
+  build-deploy:
+    name: Build & Deploy Docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - run: uv sync --all-packages --all-extras
+      - run: uv run mkdocs gh-deploy --force || echo "mkdocs not yet configured, skipping"

@@ -1,0 +1,112 @@
+# Development stack for tiered-swe-agents
+# Start with: docker compose up -d
+# Stop with:  docker compose down
+version: "3.9"
+
+services:
+  # ── Orchestrator ──────────────────────────────────────────────────────────
+  orchestrator:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.orchestrator
+    environment:
+      - APP_ENV=local
+      - MODEL_GATEWAY_URL=http://model-gateway:8001
+      - SANDBOX_WORKER_URL=http://sandbox-worker:8002
+      - DATABASE_URL=******postgres:5432/swe_agents
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      model-gateway:
+        condition: service_started
+    volumes:
+      - ./apps:/app/apps:ro
+      - ./packages:/app/packages:ro
+      - ./config:/app/config:ro
+
+  # ── Model Gateway ─────────────────────────────────────────────────────────
+  model-gateway:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.model_gateway
+    environment:
+      - APP_ENV=local
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./services/model_gateway:/app/model_gateway:ro
+      - ./config:/app/config:ro
+      # Mount local model cache (runtime, gitignored)
+      - ./runtime/model-cache:/models:ro
+
+  # ── Sandbox Worker ────────────────────────────────────────────────────────
+  sandbox-worker:
+    build:
+      context: .
+      dockerfile: services/sandbox_worker/Dockerfile
+    environment:
+      - APP_ENV=local
+      - SANDBOX_NETWORK_ACCESS=false
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./runtime/worktrees:/tmp/worktrees
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp
+
+  # ── PostgreSQL ────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: swe_agents
+      POSTGRES_USER: swe
+      POSTGRES_PASSWORD: changeme
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U swe -d swe_agents"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── Optional: Observability (profile: observability) ──────────────────────
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    profiles: ["observability"]
+    volumes:
+      - ./infra/observability/otel-collector.yaml:/etc/otel-collector-config.yaml:ro
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    ports:
+      - "4317:4317"
+
+  prometheus:
+    image: prom/prometheus:latest
+    profiles: ["observability"]
+    volumes:
+      - ./infra/observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:latest
+    profiles: ["observability"]
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
+volumes:
+  postgres_data:

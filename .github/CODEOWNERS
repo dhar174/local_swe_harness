@@ -1,0 +1,31 @@
+# CODEOWNERS – every significant path requires at least one review.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything not listed below
+*                                           @dhar174
+
+# Core orchestrator graphs and routing
+apps/orchestrator/src/swe_agents/graphs/    @dhar174
+apps/orchestrator/src/swe_agents/routing/   @dhar174
+
+# Security-critical code requires explicit review
+apps/orchestrator/src/swe_agents/security/  @dhar174
+services/sandbox_worker/                    @dhar174
+config/security.yaml                        @dhar174
+
+# Model registry and routing config (never hardcode models!)
+config/models.yaml                          @dhar174
+config/routing.yaml                         @dhar174
+packages/model_clients/                     @dhar174
+
+# Shared contracts (any breaking change requires all owners)
+packages/contracts/                         @dhar174
+
+# CI/CD and infrastructure
+.github/workflows/                          @dhar174
+infra/                                      @dhar174
+
+# Documentation
+docs/                                       @dhar174
+AGENTS.md                                   @dhar174
+SECURITY.md                                 @dhar174

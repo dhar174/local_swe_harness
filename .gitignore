@@ -1,0 +1,106 @@
+# Tiered SWE Agents – .gitignore
+# =================================
+
+# Runtime artifacts (entirely gitignored)
+runtime/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+pip-wheel-metadata/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+*.log
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env/
+ENV/
+
+# Environment variable files
+.env
+.env.local
+.env.*.local
+# keep .env.example tracked
+!.env.example
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# uv
+.uv/
+
+# Node (for any front-end tooling)
+node_modules/
+
+# Docker
+.docker/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Secrets / credentials
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Model weights and large binary artifacts
+*.gguf
+*.ggml
+*.bin
+*.safetensors
+*.pt
+*.pth
+*.onnx
+
+# Index artifacts
+*.index
+*.faiss
+*.hnsw
+
+# Generated documentation
+site/
+docs/_build/
+
+# LangGraph / LangSmith
+.langgraph/
+langsmith_cache/
+
+# Evaluation outputs (keep datasets, ignore outputs)
+evals/outputs/
+evals/results/
+
+# Test repositories / worktrees (runtime)
+tests/test_repositories/*/
+!tests/test_repositories/.gitkeep

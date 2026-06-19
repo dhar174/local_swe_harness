@@ -1,0 +1,112 @@
+# Normal CI – runs on every push and pull request.
+# Model-dependent evaluations are intentionally excluded from this workflow.
+name: CI
+
+on:
+  push:
+    branches: [main, "feat/**", "fix/**"]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint, Format & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - run: uv sync --all-packages --all-extras
+      - run: uv run ruff format --check .
+      - run: uv run ruff check .
+      - run: uv run mypy . || true  # type errors are warnings until stubs are complete
+
+  test-unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - run: uv sync --all-packages --all-extras
+      - run: uv run pytest -m "unit" --tb=short -q
+        env:
+          PYTHONPATH: >-
+            apps/orchestrator/src:services/model_gateway/src:services/sandbox_worker/src:
+            services/repo_indexer/src:packages/contracts/src:packages/model_clients/src:
+            packages/tool_clients/src
+
+  test-graph:
+    name: Graph Routing Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - run: uv sync --all-packages --all-extras
+      - run: uv run pytest -m "graph" --tb=short -q
+        env:
+          PYTHONPATH: >-
+            apps/orchestrator/src:services/model_gateway/src:services/sandbox_worker/src:
+            services/repo_indexer/src:packages/contracts/src:packages/model_clients/src:
+            packages/tool_clients/src
+
+  test-architecture:
+    name: Architecture Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - run: uv sync --all-packages --all-extras
+      - run: uv run pytest tests/test_architecture.py --tb=short -q
+        env:
+          PYTHONPATH: >-
+            apps/orchestrator/src:services/model_gateway/src:services/sandbox_worker/src:
+            services/repo_indexer/src:packages/contracts/src:packages/model_clients/src:
+            packages/tool_clients/src
+
+  coverage:
+    name: Coverage Report
+    runs-on: ubuntu-latest
+    needs: [test-unit, test-graph]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - run: uv sync --all-packages --all-extras
+      - run: |
+          uv run pytest -m "unit or graph" --cov --cov-report=xml --cov-report=term-missing -q
+        env:
+          PYTHONPATH: >-
+            apps/orchestrator/src:services/model_gateway/src:services/sandbox_worker/src:
+            services/repo_indexer/src:packages/contracts/src:packages/model_clients/src:
+            packages/tool_clients/src
+      - uses: codecov/codecov-action@v4
+        with:
+          files: coverage.xml
+          fail_ci_if_error: false

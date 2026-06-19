@@ -1,0 +1,131 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tiered-swe-agents"
+version = "0.1.0"
+description = "LangGraph multi-agent SWE system with tiered local/cloud model routing"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Charles I Niswander II" }]
+requires-python = ">=3.12"
+dependencies = [
+  # Workspace members are listed as path deps in the tool.uv.workspace section
+]
+
+[tool.uv]
+managed = true
+
+[tool.uv.workspace]
+members = [
+  "apps/orchestrator",
+  "services/model_gateway",
+  "services/sandbox_worker",
+  "services/repo_indexer",
+  "packages/contracts",
+  "packages/model_clients",
+  "packages/tool_clients",
+]
+
+# ── Ruff ──────────────────────────────────────────────────────────────────────
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["apps", "services", "packages"]
+
+[tool.ruff.lint]
+select = [
+  "E", "W",   # pycodestyle
+  "F",        # pyflakes
+  "I",        # isort
+  "N",        # pep8-naming
+  "UP",       # pyupgrade
+  "B",        # flake8-bugbear
+  "S",        # flake8-bandit
+  "T20",      # flake8-print
+  "ANN",      # flake8-annotations
+  "RUF",      # ruff-specific
+]
+ignore = [
+  "ANN101",   # missing type annotation for self
+  "ANN102",   # missing type annotation for cls
+  "S101",     # use of assert (allowed in tests)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "ANN", "T20"]
+"evals/**/*.py" = ["S101", "ANN", "T20"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["swe_agents", "model_gateway", "sandbox_worker", "repo_indexer",
+                      "contracts", "model_clients", "tool_clients"]
+
+# ── Mypy ──────────────────────────────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_reexport = true
+show_error_codes = true
+mypy_path = [
+  "apps/orchestrator/src",
+  "services/model_gateway/src",
+  "services/sandbox_worker/src",
+  "services/repo_indexer/src",
+  "packages/contracts/src",
+  "packages/model_clients/src",
+  "packages/tool_clients/src",
+]
+
+[[tool.mypy.overrides]]
+module = ["langgraph.*", "langchain.*", "langchain_core.*"]
+ignore_missing_imports = true
+
+# ── Pytest ────────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = [
+  "-ra",
+  "--strict-markers",
+  "--import-mode=importlib",
+  "--tb=short",
+]
+testpaths = [
+  "apps/orchestrator/tests",
+  "services/model_gateway/tests",
+  "services/sandbox_worker/tests",
+  "services/repo_indexer/tests",
+  "tests",
+]
+markers = [
+  "unit: fast, isolated unit tests",
+  "graph: LangGraph routing and state tests",
+  "integration: tests that require external services",
+  "e2e: full end-to-end tests",
+  "slow: tests that take more than 5 seconds",
+  "llm: tests that call real LLMs (never run in normal CI)",
+]
+
+# ── Coverage ──────────────────────────────────────────────────────────────────
+[tool.coverage.run]
+branch = true
+source = [
+  "apps/orchestrator/src",
+  "services/model_gateway/src",
+  "services/sandbox_worker/src",
+  "services/repo_indexer/src",
+  "packages/contracts/src",
+  "packages/model_clients/src",
+  "packages/tool_clients/src",
+]
+omit = ["*/tests/*", "*/__main__.py"]
+
+[tool.coverage.report]
+fail_under = 70
+show_missing = true
+skip_covered = false

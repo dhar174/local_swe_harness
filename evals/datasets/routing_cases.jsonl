@@ -1,0 +1,5 @@
+{"schema_version": 1, "id": "rc-001", "description": "simple typo fix", "expected_tier": "tier1_fast", "complexity": 0.1}
+{"schema_version": 1, "id": "rc-002", "description": "add unit tests for a function", "expected_tier": "tier1_fast", "complexity": 0.3}
+{"schema_version": 1, "id": "rc-003", "description": "refactor authentication module", "expected_tier": "tier2_heavy", "complexity": 0.6}
+{"schema_version": 1, "id": "rc-004", "description": "implement distributed rate limiter", "expected_tier": "tier2_heavy", "complexity": 0.8}
+{"schema_version": 1, "id": "rc-005", "description": "critical security vulnerability in auth", "expected_tier": "tier3_cloud", "complexity": 0.95}

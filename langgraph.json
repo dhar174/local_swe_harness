@@ -1,0 +1,7 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "main": "swe_agents.graphs.main:build_main_graph"
+  },
+  "env": ".env"
+}

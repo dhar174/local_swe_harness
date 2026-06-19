@@ -1,0 +1,66 @@
+# Evaluation harness workflow
+# IMPORTANT: Model-dependent evaluations MUST NOT block ordinary CI.
+# This workflow runs on schedule and on manual dispatch only.
+# Fake-model evaluations may run on pull requests (no real LLMs).
+name: Evaluations
+
+on:
+  workflow_dispatch:
+    inputs:
+      use_real_models:
+        description: "Run with real LLMs (requires secrets)"
+        type: boolean
+        default: false
+  schedule:
+    - cron: "0 2 * * 0"  # Weekly on Sunday at 02:00 UTC
+
+jobs:
+  eval-fake-models:
+    name: Evaluation (Fake Models)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - run: uv sync --all-packages --all-extras
+      - run: uv run python evals/run_evals.py --fake-models --output evals/results/fake/
+        env:
+          PYTHONPATH: >-
+            apps/orchestrator/src:packages/contracts/src:packages/model_clients/src:
+            packages/tool_clients/src
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-results-fake
+          path: evals/results/fake/
+          retention-days: 30
+
+  eval-real-models:
+    name: Evaluation (Real Models)
+    runs-on: ubuntu-latest
+    if: github.event.inputs.use_real_models == 'true'
+    environment: evaluation  # requires manual approval
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - run: uv sync --all-packages --all-extras
+      - run: uv run python evals/run_evals.py --output evals/results/real/
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PYTHONPATH: >-
+            apps/orchestrator/src:packages/contracts/src:packages/model_clients/src:
+            packages/tool_clients/src
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-results-real
+          path: evals/results/real/
+          retention-days: 90

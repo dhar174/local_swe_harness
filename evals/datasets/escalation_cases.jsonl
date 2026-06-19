@@ -1,0 +1,2 @@
+{"schema_version": 1, "id": "esc-001", "description": "3rd retry on complex refactor", "expected_escalated": true, "attempt": 3}
+{"schema_version": 1, "id": "esc-002", "description": "first attempt simple bug fix", "expected_escalated": false, "attempt": 0}

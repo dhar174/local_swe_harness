@@ -1,0 +1,2 @@
+{"schema_version": 1, "id": "rev-001", "description": "review: correct patch", "expected_approved": true}
+{"schema_version": 1, "id": "rev-002", "description": "review: patch with sql injection", "expected_approved": false}

@@ -1,0 +1,68 @@
+# Model capability registry
+# Model assignments are CONFIGURATION-DRIVEN. Never hardcode model names in graph nodes.
+# Schema version must be bumped on any breaking structural change.
+schema_version: 1
+
+models:
+  # ── Tier 1: Fast local models ─────────────────────────────────────────────
+  - name: qwen2.5-coder-7b-instruct
+    tier: tier1_fast
+    roles: [router, navigator, coder]
+    capabilities: [chat, code_completion, structured_output]
+    context_window: 32768
+    max_output_tokens: 4096
+    backend: llamacpp
+    cost_per_1k_input: 0.0
+    cost_per_1k_output: 0.0
+
+  - name: phi-3.5-mini-instruct
+    tier: tier1_fast
+    roles: [reviewer]
+    capabilities: [chat, structured_output]
+    context_window: 16384
+    max_output_tokens: 2048
+    backend: llamacpp
+    cost_per_1k_input: 0.0
+    cost_per_1k_output: 0.0
+
+  # ── Tier 2: Heavy local models ─────────────────────────────────────────────
+  - name: qwen2.5-coder-32b-instruct
+    tier: tier2_heavy
+    roles: [coder, architect, reviewer, critic]
+    capabilities: [chat, code_completion, function_calling, long_context, structured_output]
+    context_window: 131072
+    max_output_tokens: 8192
+    backend: llamacpp
+    cost_per_1k_input: 0.0
+    cost_per_1k_output: 0.0
+
+  - name: deepseek-r1-32b
+    tier: tier2_heavy
+    roles: [architect, critic]
+    capabilities: [chat, function_calling, long_context]
+    context_window: 131072
+    max_output_tokens: 8192
+    backend: ollama
+    cost_per_1k_input: 0.0
+    cost_per_1k_output: 0.0
+
+  # ── Tier 3: Cloud models ──────────────────────────────────────────────────
+  - name: claude-opus-4-5
+    tier: tier3_cloud
+    roles: [cloud_engineer, architect, critic]
+    capabilities: [chat, function_calling, long_context, structured_output]
+    context_window: 200000
+    max_output_tokens: 32000
+    backend: cloud
+    cost_per_1k_input: 0.015
+    cost_per_1k_output: 0.075
+
+  - name: gpt-4o
+    tier: tier3_cloud
+    roles: [cloud_engineer, reviewer]
+    capabilities: [chat, function_calling, structured_output]
+    context_window: 128000
+    max_output_tokens: 16384
+    backend: cloud
+    cost_per_1k_input: 0.005
+    cost_per_1k_output: 0.015

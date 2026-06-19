@@ -1,0 +1,11 @@
+version = 1
+requires-python = ">=3.12"
+resolution-markers = []
+
+[[package]]
+name = "tiered-swe-agents"
+version = "0.1.0"
+source = { editable = "." }
+
+# NOTE: This is a stub lock file. Run `uv lock` after installing uv to
+# generate the real lock file with all transitive dependencies pinned.

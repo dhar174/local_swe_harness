@@ -1,0 +1,45 @@
+# Automatic PR labeling (requires github/labeler action)
+orchestrator:
+  - apps/orchestrator/**
+
+model-gateway:
+  - services/model_gateway/**
+
+sandbox-worker:
+  - services/sandbox_worker/**
+
+repo-indexer:
+  - services/repo_indexer/**
+
+contracts:
+  - packages/contracts/**
+
+model-clients:
+  - packages/model_clients/**
+
+routing:
+  - apps/orchestrator/src/swe_agents/routing/**
+
+security:
+  - apps/orchestrator/src/swe_agents/security/**
+  - config/security.yaml
+  - SECURITY.md
+
+config:
+  - config/**
+
+ci:
+  - .github/workflows/**
+  - .github/**
+
+documentation:
+  - docs/**
+  - "*.md"
+
+evaluations:
+  - evals/**
+
+infrastructure:
+  - infra/**
+  - docker-compose.yml
+  - services/sandbox_worker/Dockerfile
