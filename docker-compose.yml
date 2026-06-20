@@ -1,4 +1,4 @@
-# Development stack for tiered-swe-agents
+# Development stack for local_swe_harness
 # Start with: docker compose up -d
 # Stop with:  docker compose down
 version: "3.9"

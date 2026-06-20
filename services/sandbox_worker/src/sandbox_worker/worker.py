@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from fastapi import FastAPI, HTTPException
 
-app = FastAPI(title="tiered-swe-agents sandbox worker")
+app = FastAPI(title="local_swe_harness sandbox worker")
 
 
 @app.get("/health", tags=["health"])

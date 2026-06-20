@@ -2,7 +2,7 @@
 
 ## Overview
 
-`tiered-swe-agents` is a LangGraph multi-agent system that routes coding tasks
+`local_swe_harness` is a LangGraph multi-agent system that routes coding tasks
 across three execution tiers:
 
 | Tier | Name | When |

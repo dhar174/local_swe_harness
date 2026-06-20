@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "tiered-swe-agents"
+name = "local_swe_harness"
 version = "0.1.0"
 description = "LangGraph multi-agent SWE system with tiered local/cloud model routing"
 readme = "README.md"

@@ -1,4 +1,4 @@
-# Contributing to tiered-swe-agents
+# Contributing to local_swe_harness
 
 ## Getting Started
 

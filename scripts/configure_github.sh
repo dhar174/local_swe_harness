@@ -11,7 +11,7 @@
 
 set -euo pipefail
 
-REPO="${GITHUB_REPOSITORY:-$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || echo "dhar174/tiered-swe-agents")}"
+REPO="${GITHUB_REPOSITORY:-$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || echo "dhar174/local_swe_harness")}"
 DRY_RUN=false
 log() { echo "[configure_github] $*"; }
 dry() { if $DRY_RUN; then log "[DRY-RUN] $*"; else eval "$*"; fi; }
