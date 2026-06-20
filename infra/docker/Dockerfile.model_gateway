@@ -10,6 +10,5 @@ COPY packages/ packages/
 COPY services/model_gateway/src/ services/model_gateway/src/
 COPY config/ config/
 
-RUN uv sync --frozen --no-dev
-
+RUN uv sync --no-dev
 CMD ["uv", "run", "uvicorn", "model_gateway.app:app", "--host", "0.0.0.0", "--port", "8001"]

@@ -12,8 +12,7 @@ COPY services/sandbox_worker/pyproject.toml services/sandbox_worker/
 COPY packages/ packages/
 COPY services/sandbox_worker/src/ services/sandbox_worker/src/
 
-RUN uv sync --frozen --no-dev
-
+RUN uv sync --no-dev
 USER sandbox
 
 CMD ["uv", "run", "uvicorn", "sandbox_worker.worker:app", "--host", "0.0.0.0", "--port", "8002"]

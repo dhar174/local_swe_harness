@@ -34,11 +34,9 @@ services:
     environment:
       - APP_ENV=local
     ports:
-      - "8001:8001"
     volumes:
-      - ./services/model_gateway:/app/model_gateway:ro
+      - ./services/model_gateway:/app/services/model_gateway:ro
       - ./config:/app/config:ro
-      # Mount local model cache (runtime, gitignored)
       - ./runtime/model-cache:/models:ro
 
   # ── Sandbox Worker ────────────────────────────────────────────────────────

@@ -27,10 +27,16 @@ class RepositoryClient:
     def file_content(self, path: str) -> str:
         return (self.repo_path / path).read_text()
 
-    def apply_patch(self, patch: str) -> None:
-        import tempfile
+def apply_patch(self, patch: str) -> None:
+    import os
+    import tempfile
 
-        with tempfile.NamedTemporaryFile(suffix=".patch", delete=False, mode="w") as f:
-            f.write(patch)
-            f.flush()
-            self._run("apply", f.name)
+    with tempfile.NamedTemporaryFile(suffix=".patch", delete=False, mode="w") as f:
+        f.write(patch)
+        f.flush()
+        patch_path = f.name
+
+    try:
+        self._run("apply", patch_path)
+    finally:
+        os.unlink(patch_path)

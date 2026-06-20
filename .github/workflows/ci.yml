@@ -32,8 +32,7 @@ jobs:
       - run: uv sync --all-packages --all-extras
       - run: uv run ruff format --check .
       - run: uv run ruff check .
-      - run: uv run mypy . || true  # type errors are warnings until stubs are complete
-
+      - run: uv run mypy .
   test-unit:
     name: Unit Tests
     runs-on: ubuntu-latest

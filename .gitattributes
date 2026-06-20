@@ -15,8 +15,7 @@
 *.pdf binary
 *.zip binary
 *.tar.gz binary
-*.lock binary
-
+*.lock text eol=lf
 # Explicitly mark Python source files as text
 *.py text eol=lf
 *.pyi text eol=lf

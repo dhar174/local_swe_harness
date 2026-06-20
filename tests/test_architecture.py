@@ -10,7 +10,6 @@ Rules:
 from __future__ import annotations
 
 import ast
-import sys
 from pathlib import Path
 from typing import Iterator
 

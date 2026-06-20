@@ -7,13 +7,10 @@ from __future__ import annotations
 
 import pytest
 
-from contracts.state import Tier, TaskStatus
-from contracts.tasks import Task, TaskRequest
-from model_clients.fake import FakeModelClient
-from model_clients.capabilities import ModelRole, ModelTier, ModelSpec, ModelCapability
+from contracts.state import Tier
+from model_clients.capabilities import ModelCapability, ModelRole, ModelSpec, ModelTier
 from model_clients.registry import ModelRegistry
-from swe_agents.routing.complexity import score_complexity
-from swe_agents.routing.escalation import should_escalate, next_tier
+from swe_agents.routing.escalation import next_tier, should_escalate
 from swe_agents.state import OrchestratorState
 
 
