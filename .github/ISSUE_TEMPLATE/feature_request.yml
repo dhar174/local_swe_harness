@@ -1,0 +1,49 @@
+name: Feature Request
+description: Propose a new feature or enhancement
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Feature Title
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Target Component
+      options:
+        - orchestrator
+        - model-gateway
+        - sandbox-worker
+        - repo-indexer
+        - routing
+        - contracts
+        - evaluations
+        - documentation
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this feature needed?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution
+    validations:
+      required: true
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Architecture Constraints Respected
+      options:
+        - label: No hardcoded model names (configuration-driven)
+          required: false
+        - label: No cross-layer imports
+          required: false
+        - label: Sandbox trust boundaries maintained
+          required: false

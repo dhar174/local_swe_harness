@@ -1,0 +1,20 @@
+# version: 1
+# Router few-shot examples
+examples:
+  - input: "Fix typo in README"
+    output:
+      tier: tier1_fast
+      complexity_score: 0.05
+      reasoning: "Documentation fix, no code change"
+
+  - input: "Refactor authentication module to use JWT"
+    output:
+      tier: tier2_heavy
+      complexity_score: 0.65
+      reasoning: "Multi-file change, security-sensitive, requires testing"
+
+  - input: "Investigate and fix intermittent race condition in distributed lock"
+    output:
+      tier: tier3_cloud
+      complexity_score: 0.92
+      reasoning: "High complexity, concurrency issue, requires expert reasoning"

@@ -1,0 +1,45 @@
+# Security policy configuration
+schema_version: 1
+
+sandbox:
+  # Trust boundary: sandbox worker is untrusted; orchestrator never executes
+  # arbitrary code directly.
+  trust_boundary: sandbox_worker_only
+  network_access: false
+  max_cpu_seconds: 60
+  max_memory_mb: 512
+
+allowed_commands:
+  - pytest
+  - ruff check
+  - ruff format
+  - mypy
+  - python -m pytest
+  - uv run pytest
+  - git diff
+  - git status
+  - git log
+
+allowed_paths:
+  - /tmp/worktrees/
+  - /workspace/
+
+prompt_injection:
+  # Strip system-role overrides and role-play instructions from user content
+  strip_system_overrides: true
+  max_user_content_length: 32768
+
+secrets:
+  # These keys are redacted from logs and observability events
+  redact_keys:
+    - api_key
+    - token
+    - secret
+    - password
+    - credential
+    - auth
+
+destructive_actions_require_approval:
+  - force_push
+  - drop_table
+  - deploy_production

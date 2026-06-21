@@ -1,0 +1,29 @@
+# Routing policy configuration
+schema_version: 1
+
+policy:
+  # Complexity thresholds for tier selection
+  tier1_complexity_ceiling: 0.50   # tasks below this stay on tier1
+  tier2_complexity_ceiling: 0.85   # tasks below this use tier2; above → tier3
+
+  # Retry limits
+  max_retries_per_tier: 3
+
+  # Automatic escalation triggers
+  escalation_on_test_failure: true
+  escalation_on_review_rejection_count: 2
+  escalation_on_timeout_seconds: 300
+
+  # Human approval gates
+  require_approval_for:
+    - force_push
+    - drop_table
+    - deploy_production
+
+scoring:
+  # Weights for composite complexity scoring
+  file_count_weight: 0.20
+  test_coverage_penalty_weight: 0.15
+  cyclomatic_complexity_weight: 0.25
+  dependency_depth_weight: 0.20
+  issue_priority_weight: 0.20

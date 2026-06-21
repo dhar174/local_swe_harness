@@ -1,0 +1,5 @@
+env: test
+log_level: WARNING
+model_gateway_url: http://model-gateway:8001
+sandbox_worker_url: http://sandbox-worker:8002
+database_url: postgresql://swe:CHANGE_ME@postgres:5432/swe_agents_test

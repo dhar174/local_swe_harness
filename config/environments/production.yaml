@@ -1,0 +1,5 @@
+env: production
+log_level: INFO
+model_gateway_url: http://model-gateway:8001
+sandbox_worker_url: http://sandbox-worker:8002
+# database_url comes from environment variable in production
