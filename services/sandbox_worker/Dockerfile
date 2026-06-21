@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 # Drop all capabilities; only allow execution within /tmp/worktrees
 RUN useradd --create-home --shell /bin/bash sandbox
